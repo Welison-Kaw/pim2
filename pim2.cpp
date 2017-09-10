@@ -40,8 +40,11 @@ centraliza(int l, std::string s) {
 
 tela (int v) {
 	system("cls");
+	
+	gotoxy (57,2);
+	//char numero = (char)v;
+
 	std::cout << "Tela " << v+1;
-	//printf("teste");
 	getch();
 }
 
