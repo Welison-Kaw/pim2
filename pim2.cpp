@@ -57,7 +57,7 @@ tela_menu(int menu) {
 	// BRANCO
 	textcolor(WHITE);
 	
-	centraliza(2, "ALUGUEL DE VEICULOS");
+	centraliza(2, "LEGAL RENT A CARS");
 	
 	linha = 6;
 	
