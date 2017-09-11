@@ -5,6 +5,9 @@
 
 using namespace std;
 
+const string tituloTexto = "LEGAL RENT A CARS";
+const int tituloLinha = 2;
+
 enum DOS_COLORS {
         BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN,
         LIGHT_GRAY, DARK_GRAY, LIGHT_BLUE, LIGHT_GREEN, LIGHT_CYAN,
@@ -38,6 +41,46 @@ centraliza(int l, std::string s) {
 	std::cout << s;
 }
 
+borda (int xa, int ya, int xb, int yb, int tipo) {
+	int bordaSimples[6] = {218,191,192,217,196,179};
+	int bordaDupla[6] = {201,187,200,188,205,186};
+	int bordaTipo[6];
+	
+	if (tipo == 1) {
+		memcpy(bordaTipo, bordaSimples, sizeof(bordaTipo));
+	} else {
+		memcpy(bordaTipo, bordaDupla, sizeof(bordaTipo));
+	}
+	
+	gotoxy(xa, ya);
+	cout << char(bordaTipo[0]);
+	gotoxy(xb, ya);
+	cout << char(bordaTipo[1]);
+	gotoxy(xa, yb);
+	cout << char(bordaTipo[2]);
+	gotoxy(xb, yb);
+	cout << char(bordaTipo[3]);
+	
+	int i;
+	for(i=xa+1;i<xb;i++){
+		gotoxy(i,ya);
+		cout << char(bordaTipo[4]);
+		gotoxy(i,yb);
+		cout << char(bordaTipo[4]);
+	}
+	for(i=ya+1;i<yb;i++){
+		gotoxy(xa,i);
+		cout << char(bordaTipo[5]);
+		gotoxy(xb,i);
+		cout << char(bordaTipo[5]);
+	}
+}
+
+titulo() {
+	centraliza(tituloLinha, tituloTexto);
+	borda((120-tituloTexto.length())/2-2,tituloLinha-1,(120-tituloTexto.length())/2+tituloTexto.length()+1,tituloLinha+1,1);
+}
+
 tela (int v) {
 	system("cls");
 	
@@ -57,7 +100,9 @@ tela_menu(int menu) {
 	// BRANCO
 	textcolor(WHITE);
 	
-	centraliza(2, "LEGAL RENT A CARS");
+	titulo();
+	
+	//centraliza(2, "LEGAL RENT A CARS");
 	
 	linha = 6;
 	
@@ -112,9 +157,9 @@ tela_menu(int menu) {
 
 int main() {
 	int menu = 4;
-	printf("teste");
     tela_menu(menu);
     //getch();
 
 	return 0;
 }
+
