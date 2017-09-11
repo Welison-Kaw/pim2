@@ -38,7 +38,8 @@ void backcolor (DOS_COLORS iColor) {
 }
 
 centraliza(int l, std::string s) {
-	gotoxy((120-s.length())/2,l);
+	//gotoxy((120-s.length())/2,l);
+	gotoxy((80-s.length())/2,l);
 	std::cout << s;
 }
 
@@ -79,7 +80,8 @@ borda (int xa, int ya, int xb, int yb, int tipo) {
 
 titulo() {
 	centraliza(tituloLinha, tituloTexto);
-	borda((120-tituloTexto.length())/2-2,tituloLinha-1,(120-tituloTexto.length())/2+tituloTexto.length()+1,tituloLinha+1,1);
+	//borda((120-tituloTexto.length())/2-2,tituloLinha-1,(120-tituloTexto.length())/2+tituloTexto.length()+1,tituloLinha+1,1);
+	borda((80-tituloTexto.length())/2-2,tituloLinha-1,(80-tituloTexto.length())/2+tituloTexto.length()+1,tituloLinha+1,1);
 }
 
 tela (int v) {
@@ -97,14 +99,32 @@ telaListaVeiculos() {
 	ifstream arquivoVeiculos("veiculos.dat");
 	int posicao = 0;
 	int tamanhoColuna = 15;
+	int l;
 	
 	textcolor(WHITE);
 	titulo();
+    borda(0,0,79,24,2);
 	
 	if (arquivoVeiculos.is_open()) {
-		gotoxy(1,5);
+		l = 7;
+		centraliza(l-2,"Listagem de Veiculos");
+		borda(2,l-1,77,23,1);
+		gotoxy(5,l);
 		
 		while (getline(arquivoVeiculos, linha)) {
+			
+			switch (linha[0]) {
+				case '0':
+					textcolor(WHITE);
+					break;
+				case '1':
+					textcolor(LIGHT_RED);
+					break;
+				case 'F':
+					textcolor(LIGHT_GREEN);
+					break;
+			}
+
 			for(std::string::size_type i = 0; i < linha.size(); ++i) {
 				if (posicao > 0 && linha[i] != ';') {
 					cout << linha[i];
@@ -117,13 +137,18 @@ telaListaVeiculos() {
 				}
 				posicao++;
 			}
-			cout << '\n';
+			
+			l++;
+			gotoxy(5,l);
+			
+			//cout << '\n';
 			posicao = 0;
 		}
 		arquivoVeiculos.close();
 	} else {
 		cout << "Não foi possível abrir o arquivo";
 	}
+	
 	getch();
 }
 
@@ -135,6 +160,7 @@ tela_menu(int menu) {
 	
 	// BRANCO
 	textcolor(WHITE);
+    borda(0,0,79,24,2);
 	
 	titulo();
 	
