@@ -2,6 +2,7 @@
 #include<conio.h>
 #include<windows.h>
 #include<iostream>
+#include<fstream>
 
 using namespace std;
 
@@ -85,9 +86,44 @@ tela (int v) {
 	system("cls");
 	
 	gotoxy (57,2);
-	//char numero = (char)v;
 
 	std::cout << "Tela " << v+1;
+	getch();
+}
+
+telaListaVeiculos() {
+	system("cls");
+	string linha;
+	ifstream arquivoVeiculos("veiculos.dat");
+	int posicao = 0;
+	int tamanhoColuna = 15;
+	
+	textcolor(WHITE);
+	titulo();
+	
+	if (arquivoVeiculos.is_open()) {
+		gotoxy(1,5);
+		
+		while (getline(arquivoVeiculos, linha)) {
+			for(std::string::size_type i = 0; i < linha.size(); ++i) {
+				if (posicao > 0 && linha[i] != ';') {
+					cout << linha[i];
+				}
+				if (posicao > 1 && linha[i] == ';') {
+					for (int i=posicao;i<=tamanhoColuna;i++) {
+						cout << ' ';
+					}
+					posicao = 1;
+				}
+				posicao++;
+			}
+			cout << '\n';
+			posicao = 0;
+		}
+		arquivoVeiculos.close();
+	} else {
+		cout << "Não foi possível abrir o arquivo";
+	}
 	getch();
 }
 
@@ -101,8 +137,6 @@ tela_menu(int menu) {
 	textcolor(WHITE);
 	
 	titulo();
-	
-	//centraliza(2, "LEGAL RENT A CARS");
 	
 	linha = 6;
 	
@@ -141,12 +175,15 @@ tela_menu(int menu) {
 				}
 				textcolor(LIGHT_RED);
 				centraliza(8+menu*2, item_menu[menu]);
-				//std:cout << "DOWN";
 				break;
 		}
 	} while ((int)cIn != 13);
 	
 	switch (menu) {
+		case 3:
+			telaListaVeiculos();
+			tela_menu(menu);
+			break;
 		case 4:
 			break;
 		default:
