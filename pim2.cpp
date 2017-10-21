@@ -3,6 +3,7 @@
 #include<windows.h>
 #include<iostream>
 #include<fstream>
+#include <regex>
 
 using namespace std;
 
@@ -78,14 +79,51 @@ void borda (int xa, int ya, int xb, int yb, int tipo) {
 	}
 }
 
-bool valida_entrada(std::string n) {
-	/*if (n.length() > 0) {
-		return true;
-	} else {
-		return false;
-	}*/
+std::string validaEntrada(int tipo, int x, int y) {
+	/*	
+		TIPO
+		1 - APENAS NÚMEROS
+		2 - APENAS LETRAS, ESPAÇO E APÓSTROFO
+		OUTROS - 1 e 2
+	*/
 	
-	return true;
+	std::string n;
+	n = "";
+	
+	unsigned char cIn;
+	do {
+		cIn = getch();
+		
+		std::regex match;
+		switch (tipo) {
+			case 1:
+				match = ("[0-9]");
+				break;
+			case 2:
+				match = "[a-zA-Z' ]";
+				break;
+			default:
+				match = "[0-9a-zA-Z' ]";
+				break;
+		}
+
+		if (std::regex_match(string(1,cIn), match) or (int)cIn == 8) {
+			/*gotoxy(1,1);
+			cout << (int)cIn;*/
+			gotoxy(x,y);
+	
+			if ((int)cIn == 8) {
+				if (n.length() > 0)
+					n.pop_back();
+				cout << n + ' ';
+			} else {
+				n += cIn;
+				cout << n;
+			}
+		}
+	} while ((n.length()) == 0 or ((int)cIn != 13));
+	
+	return n;
 }
 
 void titulo() {
@@ -108,12 +146,13 @@ void telaCadastroClientes() {
 	int l = 7;
 	bool salvar;
 	
-	char nome[30];
-	char rg[9];
-	char cpf[14];
-	char habilitacao[10];
-	char nascimento[10];
-	char ong[10];
+	//char nome[30];
+	std::string nome;
+	std::string rg;
+	std::string cpf;
+	std::string habilitacao;
+	std::string nascimento;
+	std::string ong;
 	
 	textcolor(WHITE);
 	titulo();
@@ -126,53 +165,71 @@ void telaCadastroClientes() {
 	std::string item_cad[6] = {"Nome/Razao Social:", "RG:", "CPF/CNPJ:", "Habilitacao:", "Nascimento:", "ONG:"};
 	
 	textcolor(LIGHT_RED);
-	for (int i=0; i<6; i++) {
+	/*for (int i=0; i<6; i++) {
 		gotoxy(5,++l);
 		++l;
 		cout << item_cad[i];
-	}
+	}*/
+	
+	gotoxy(5,++l);
+	cout << item_cad[0];
+
+	++l;
+	gotoxy(5,++l);
+	cout << item_cad[1];
+	
+	gotoxy(40,l);
+	cout << item_cad[2];
+	
+	++l;
+	gotoxy(5,++l);
+	cout << item_cad[3];
+	
+	gotoxy(40,l);
+	cout << item_cad[4];
+
+	++l;
+	gotoxy(5,++l);
+	cout << item_cad[5];
 	
 	l = 7;
 
 	textcolor(WHITE);
+
 	gotoxy(item_cad[0].length()+6, ++l);
+	nome = validaEntrada(2,item_cad[0].length()+6, l);
 
-	/*   ~~~~~~~~~ TESTE OS DOIS ~~~~~~~~  */	
-	/*nome = valida_entrada(nome);
+	l += 2;
+
+	gotoxy(item_cad[1].length()+6, l);
+	rg = validaEntrada(1,item_cad[1].length()+6, l);
 	
-	while (!valida_entrada(nome)) {
-		scanf("%s", &nome);
-	}*/
+	gotoxy(item_cad[2].length()+41, l);
+	cpf = validaEntrada(1,item_cad[2].length()+41, l);;
 	
-	++l;
-	scanf("%s", &nome);
-	gotoxy(item_cad[1].length()+6, ++l);
-	++l;
-	scanf("%s", &rg);
-	gotoxy(item_cad[2].length()+6, ++l);
-	++l;
-	scanf("%s", &cpf);
-	gotoxy(item_cad[3].length()+6, ++l);
-	++l;
-	scanf("%s", &habilitacao);
-	gotoxy(item_cad[4].length()+6, ++l);
-	++l;
-	scanf("%s", &nascimento);
-	gotoxy(item_cad[5].length()+6, ++l);
-	++l;
-	scanf("%s", &ong);
-		
-	l++;	
-	//borda(20,l,60,l+4,1);
+	l += 2;
+	gotoxy(item_cad[3].length()+6, l);
+	habilitacao = validaEntrada(1,item_cad[3].length()+6, l);
+
+	gotoxy(item_cad[4].length()+41, l);
+	nascimento = validaEntrada(1,item_cad[4].length()+41, l);
 	
+	l += 2;
+	gotoxy(item_cad[5].length()+6, l);
+	ong = validaEntrada(3,item_cad[5].length()+6, l);
+	
+	l += 5;
+
 	centraliza(l++, "Deseja salvar o usuario?");
-	//centraliza(++l, "Sim   Nao");
+	l++;
 
-	gotoxy(35, l);
+	gotoxy(34, l);
 	cout << "Sim";
-	gotoxy(41, l);
+	gotoxy(42, l);
 	textcolor(LIGHT_RED);
 	cout << "Nao";
+	textcolor(WHITE);
+	borda(40,l-1,46,l+1,1);
 	salvar = false;
 
 	unsigned char cIn;
@@ -181,20 +238,34 @@ void telaCadastroClientes() {
 		switch ((int)cIn) {
 			case 75:
 				textcolor(LIGHT_RED);
-				gotoxy(35,l);
+				gotoxy(34,l);
 				cout << "Sim";
 				textcolor(WHITE);
-				gotoxy(41,l);
+				gotoxy(42,l);
 				cout << "Nao";
+				
+				textcolor(BLACK);
+				borda(40,l-1,46,l+1,1);
+
+				textcolor(WHITE);
+				borda(32,l-1,38,l+1,1);
+				
 				salvar = true;
 				break;
 			case 77:
 				textcolor(WHITE);
-				gotoxy(35,l);
+				gotoxy(34,l);
 				cout << "Sim";
 				textcolor(LIGHT_RED);
-				gotoxy(41,l);
+				gotoxy(42,l);
 				cout << "Nao";
+
+				textcolor(BLACK);
+				borda(32,l-1,38,l+1,1);
+
+				textcolor(WHITE);
+				borda(40,l-1,46,l+1,1);
+
 				salvar = false;
 				break;
 		}
@@ -422,10 +493,15 @@ void tela_menu(int menu) {
 }
 
 int main() {
-	//int menu = 4;
-	int menu = 0;
+	int menu = 5;
     tela_menu(menu);
-    //getch();
+    
+	/*std::string nome;
+    
+    nome = validaEntrada(2,0,10);
+    
+    gotoxy(1,1);
+    cout << nome;*/
 
 	return 0;
 }
