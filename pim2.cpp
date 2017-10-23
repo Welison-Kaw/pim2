@@ -3,7 +3,7 @@
 #include<windows.h>
 #include<iostream>
 #include<fstream>
-#include <regex>
+#include<regex>
 
 using namespace std;
 
@@ -100,10 +100,10 @@ std::string validaEntrada(int tipo, int x, int y) {
 				match = ("[0-9]");
 				break;
 			case 2:
-				match = "[a-zA-Z' ]";
+				match = ("[a-zA-Z' ]");
 				break;
 			default:
-				match = "[0-9a-zA-Z' ]";
+				match = ("[0-9a-zA-Z' ]");
 				break;
 		}
 
@@ -146,7 +146,6 @@ void telaCadastroClientes() {
 	int l = 7;
 	bool salvar;
 	
-	//char nome[30];
 	std::string nome;
 	std::string rg;
 	std::string cpf;
@@ -195,28 +194,36 @@ void telaCadastroClientes() {
 	l = 7;
 
 	textcolor(WHITE);
+	
+	char nn = '3';
 
 	gotoxy(item_cad[0].length()+6, ++l);
-	nome = validaEntrada(2,item_cad[0].length()+6, l);
+	//nome = validaEntrada(2,item_cad[0].length()+6, l);
+	nome = "NOME";
 
 	l += 2;
 
 	gotoxy(item_cad[1].length()+6, l);
-	rg = validaEntrada(1,item_cad[1].length()+6, l);
+	//rg = validaEntrada(1,item_cad[1].length()+6, l);
+	rg = "RG";
 	
 	gotoxy(item_cad[2].length()+41, l);
-	cpf = validaEntrada(1,item_cad[2].length()+41, l);;
+	//cpf = validaEntrada(1,item_cad[2].length()+41, l);
+	cpf = "CPF";
 	
 	l += 2;
 	gotoxy(item_cad[3].length()+6, l);
-	habilitacao = validaEntrada(1,item_cad[3].length()+6, l);
+	//habilitacao = validaEntrada(1,item_cad[3].length()+6, l);
+	habilitacao = "HABILITACAO";
 
 	gotoxy(item_cad[4].length()+41, l);
-	nascimento = validaEntrada(1,item_cad[4].length()+41, l);
+	//nascimento = validaEntrada(1,item_cad[4].length()+41, l);
+	nascimento = "NASCIMENTO";
 	
 	l += 2;
 	gotoxy(item_cad[5].length()+6, l);
-	ong = validaEntrada(3,item_cad[5].length()+6, l);
+	//ong = validaEntrada(3,item_cad[5].length()+6, l);
+	ong = "ONG";
 	
 	l += 5;
 
@@ -273,6 +280,17 @@ void telaCadastroClientes() {
 	
 	if (salvar) {
 		/* SALVAR ARQUIVO */
+		ofstream arquivoCliente("clientes.dat",ios::app);
+		if (arquivoCliente.is_open()) {
+			arquivoCliente << "0;";
+			arquivoCliente << nome << nn << ';';
+			arquivoCliente << rg << nn << ';';
+			arquivoCliente << cpf << nn << ';';
+			arquivoCliente << habilitacao << nn << ';';
+			arquivoCliente << nascimento << nn << ';';
+			arquivoCliente << ong << nn << ';' << '\n';
+			arquivoCliente.close();
+		}
 	}
 }
 
@@ -333,7 +351,7 @@ void telaListaClientes() {
 		}
 		arquivoCliente.close();
 	} else {
-		cout << "Não foi possível abrir o arquivo";
+		cout << "Nao foi possivel abrir o arquivo";
 	}
 	
 	getch();
@@ -342,6 +360,7 @@ void telaListaClientes() {
 void telaCadastroVeiculos() {
 	system("cls");
 	int l = 7;
+	bool salvar;
 
 	textcolor(WHITE);
 	titulo();
@@ -350,7 +369,109 @@ void telaCadastroVeiculos() {
     borda(2,l-1,77,23,1);
     
 	centraliza(l-2,"Cadastro de Veiculos");
+	
+	//F;Placa;Modelo;Marca;
+	std::string item_cad[3] = {"Placa:", "Modelo:", "Marca:"};
+	std::string placa;
+	std::string modelo;
+	std::string marca;
+	
+	textcolor(LIGHT_RED);
+	gotoxy(5,++l);
+	cout << item_cad[0];
+	++l;
+	gotoxy(5,++l);
+	cout << item_cad[1];
+	++l;
+	gotoxy(5,++l);
+	cout << item_cad[2];
+	
+	textcolor(WHITE);
+	
+	l = 7;
+	gotoxy(item_cad[0].length()+6, ++l);
+	placa = "";
+	getch();
+	++l;
 
+	gotoxy(item_cad[1].length()+6, ++l);
+	modelo = "";
+	getch();
+	++l;
+	
+	gotoxy(item_cad[2].length()+6, ++l);
+	marca = "";
+	getch();
+	
+	l += 2;
+	
+	centraliza(l++, "Deseja salvar o usuario?");
+	l++;
+	
+	gotoxy(34, l);
+	cout << "Sim";
+	gotoxy(42, l);
+	textcolor(LIGHT_RED);
+	cout << "Nao";
+	textcolor(WHITE);
+	borda(40,l-1,46,l+1,1);
+	salvar = false;
+	
+	unsigned char cIn;
+	do {
+		cIn = getch();
+		switch ((int)cIn) {
+			case 75:
+				textcolor(LIGHT_RED);
+				gotoxy(34,l);
+				cout << "Sim";
+				textcolor(WHITE);
+				gotoxy(42,l);
+				cout << "Nao";
+				
+				textcolor(BLACK);
+				borda(40,l-1,46,l+1,1);
+
+				textcolor(WHITE);
+				borda(32,l-1,38,l+1,1);
+				
+				salvar = true;
+				break;
+			case 77:
+				textcolor(WHITE);
+				gotoxy(34,l);
+				cout << "Sim";
+				textcolor(LIGHT_RED);
+				gotoxy(42,l);
+				cout << "Nao";
+
+				textcolor(BLACK);
+				borda(32,l-1,38,l+1,1);
+
+				textcolor(WHITE);
+				borda(40,l-1,46,l+1,1);
+
+				salvar = false;
+				break;
+		}
+	} while ((int)cIn != 13);
+	
+	placa = 'A';
+	modelo = 'B';
+	marca = 'C';
+	
+	if (salvar) {
+		// SALVAR ARQUIVO DO VE�CULO
+		ofstream arquivoVeiculo("veiculos.dat",ios::app);
+		if (arquivoVeiculo.is_open()) {
+			arquivoVeiculo << "0;";
+			arquivoVeiculo << placa << ';';
+			arquivoVeiculo << modelo << ';';
+			arquivoVeiculo << marca << ';' << '\n';
+			arquivoVeiculo.close();
+		}
+	}
+	
 	getch();
 }
 
@@ -402,12 +523,11 @@ void telaListaVeiculos() {
 			l++;
 			gotoxy(5,l);
 			
-			//cout << '\n';
 			posicao = 0;
 		}
 		arquivoVeiculos.close();
 	} else {
-		cout << "Não foi possível abrir o arquivo";
+		cout << "Nao foi possivel abrir o arquivo";
 	}
 	
 	getch();
