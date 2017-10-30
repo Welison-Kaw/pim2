@@ -82,8 +82,8 @@ void borda (int xa, int ya, int xb, int yb, int tipo) {
 std::string validaEntrada(int tipo, int x, int y) {
 	/*	
 		TIPO
-		1 - APENAS NÚMEROS
-		2 - APENAS LETRAS, ESPAÇO E APÓSTROFO
+		1 - APENAS NÃšMEROS
+		2 - APENAS LETRAS, ESPAÃ‡O E APÃ“STROFO
 		OUTROS - 1 e 2
 	*/
 	
@@ -146,13 +146,17 @@ void telaCadastroClientes() {
 	int l = 7;
 	bool salvar;
 	
-	std::string nome;
-	std::string rg;
-	std::string cpf;
-	std::string habilitacao;
-	std::string nascimento;
-	std::string ong;
+	struct cadastroCliente {
+		std::string nome;
+		std::string rg;
+		std::string cpf;
+		std::string habilitacao;
+		std::string nascimento;
+		std::string ong;
+	};
 	
+	struct cadastroCliente cliente;
+		
 	textcolor(WHITE);
 	titulo();
 	borda(0,0,79,24,2);
@@ -199,31 +203,31 @@ void telaCadastroClientes() {
 
 	gotoxy(item_cad[0].length()+6, ++l);
 	//nome = validaEntrada(2,item_cad[0].length()+6, l);
-	nome = "NOME";
+	cliente.nome = "NOME";
 
 	l += 2;
 
 	gotoxy(item_cad[1].length()+6, l);
 	//rg = validaEntrada(1,item_cad[1].length()+6, l);
-	rg = "RG";
+	cliente.rg = "RG";
 	
 	gotoxy(item_cad[2].length()+41, l);
 	//cpf = validaEntrada(1,item_cad[2].length()+41, l);
-	cpf = "CPF";
+	cliente.cpf = "CPF";
 	
 	l += 2;
 	gotoxy(item_cad[3].length()+6, l);
 	//habilitacao = validaEntrada(1,item_cad[3].length()+6, l);
-	habilitacao = "HABILITACAO";
+	cliente.habilitacao = "HABILITACAO";
 
 	gotoxy(item_cad[4].length()+41, l);
 	//nascimento = validaEntrada(1,item_cad[4].length()+41, l);
-	nascimento = "NASCIMENTO";
+	cliente.nascimento = "NASCIMENTO";
 	
 	l += 2;
 	gotoxy(item_cad[5].length()+6, l);
 	//ong = validaEntrada(3,item_cad[5].length()+6, l);
-	ong = "ONG";
+	cliente.ong = "ONG";
 	
 	l += 5;
 
@@ -283,12 +287,12 @@ void telaCadastroClientes() {
 		ofstream arquivoCliente("clientes.dat",ios::app);
 		if (arquivoCliente.is_open()) {
 			arquivoCliente << "0;";
-			arquivoCliente << nome << nn << ';';
-			arquivoCliente << rg << nn << ';';
-			arquivoCliente << cpf << nn << ';';
-			arquivoCliente << habilitacao << nn << ';';
-			arquivoCliente << nascimento << nn << ';';
-			arquivoCliente << ong << nn << ';' << '\n';
+			arquivoCliente << cliente.nome << nn << ';';
+			arquivoCliente << cliente.rg << nn << ';';
+			arquivoCliente << cliente.cpf << nn << ';';
+			arquivoCliente << cliente.habilitacao << nn << ';';
+			arquivoCliente << cliente.nascimento << nn << ';';
+			arquivoCliente << cliente.ong << nn << ';' << '\n';
 			arquivoCliente.close();
 		}
 	}
@@ -372,9 +376,14 @@ void telaCadastroVeiculos() {
 	
 	//F;Placa;Modelo;Marca;
 	std::string item_cad[3] = {"Placa:", "Modelo:", "Marca:"};
-	std::string placa;
-	std::string modelo;
-	std::string marca;
+	
+	struct clienteVeiculo {
+		std::string placa;
+		std::string modelo;
+		std::string marca;
+	};
+	
+	struct clienteVeiculo veiculo;
 	
 	textcolor(LIGHT_RED);
 	gotoxy(5,++l);
@@ -390,17 +399,17 @@ void telaCadastroVeiculos() {
 	
 	l = 7;
 	gotoxy(item_cad[0].length()+6, ++l);
-	placa = "";
+	veiculo.placa = "";
 	getch();
 	++l;
 
 	gotoxy(item_cad[1].length()+6, ++l);
-	modelo = "";
+	veiculo.modelo = "";
 	getch();
 	++l;
 	
 	gotoxy(item_cad[2].length()+6, ++l);
-	marca = "";
+	veiculo.marca = "";
 	getch();
 	
 	l += 2;
@@ -456,18 +465,18 @@ void telaCadastroVeiculos() {
 		}
 	} while ((int)cIn != 13);
 	
-	placa = 'A';
-	modelo = 'B';
-	marca = 'C';
+	veiculo.placa = 'A';
+	veiculo.modelo = 'B';
+	veiculo.marca = 'C';
 	
 	if (salvar) {
-		// SALVAR ARQUIVO DO VEÍCULO
+		// SALVAR ARQUIVO DO VEÃCULO
 		ofstream arquivoVeiculo("veiculos.dat",ios::app);
 		if (arquivoVeiculo.is_open()) {
 			arquivoVeiculo << "0;";
-			arquivoVeiculo << placa << ';';
-			arquivoVeiculo << modelo << ';';
-			arquivoVeiculo << marca << ';' << '\n';
+			arquivoVeiculo << veiculo.placa << ';';
+			arquivoVeiculo << veiculo.modelo << ';';
+			arquivoVeiculo << veiculo.marca << ';' << '\n';
 			arquivoVeiculo.close();
 		}
 	}
@@ -533,11 +542,45 @@ void telaListaVeiculos() {
 	getch();
 }
 
-void tela_menu(int menu) {
-	//clrscr();
+void telaLocacao() {
+	system("cls");
+	int l = 7;
+	//bool salvar;
+
+	textcolor(WHITE);
+	titulo();
+    borda(0,0,79,24,2);
+    
+    borda(2,l-1,77,23,1);
+    
+	centraliza(l-2,"Locacao de Veiculos");
+	
+	/* ESCOLHE VEÃCULO */
+	/* SELECIONA DATA DE ENTREGA */
+	
+	getch();
+}
+
+void telaDevolucao() {
+	system("cls");
+	int l = 7;
+	//bool salvar;
+
+	textcolor(WHITE);
+	titulo();
+    borda(0,0,79,24,2);
+    
+    borda(2,l-1,77,23,1);
+    
+	centraliza(l-2,"Devolucao de Veiculos");
+	
+	getch();
+}
+
+void telaMenu(int menu) {
 	system("cls");
 	int linha;
-	string item_menu[6] = {"Cadastrar Novo Cliente", "Visualizar Lista de Clientes", "Cadastrar Novo Veiculo", "Verificar Lista de Veiculos", "Devolucao", "Sair"};
+	string itemMenu[7] = {"Cadastrar Novo Cliente", "Visualizar Lista de Clientes", "Cadastrar Novo Veiculo", "Verificar Lista de Veiculos", "Locacao", "Devolucao", "Sair"};
 	
 	// BRANCO
 	textcolor(WHITE);
@@ -547,14 +590,14 @@ void tela_menu(int menu) {
 	
 	linha = 6;
 	
-	for (int i=0; i<6; i++) {
+	for (int i=0; i<7; i++) {
 		if (menu == i) {
 			textcolor(LIGHT_RED);
 		} else {
 			textcolor(WHITE);
 		}
 		linha += 2;
-		centraliza(linha, item_menu[i]);
+		centraliza(linha, itemMenu[i]);
 	}
 	
 	unsigned char cIn;
@@ -563,25 +606,25 @@ void tela_menu(int menu) {
 		switch ((int)cIn) {
 			case 72:
 				textcolor(WHITE);
-				centraliza(8+menu*2, item_menu[menu]);
+				centraliza(8+menu*2, itemMenu[menu]);
 				if (menu == 0) {
-					menu = 5;
+					menu = 6;
 				} else {
 					menu--;
 				}
 				textcolor(LIGHT_RED);
-				centraliza(8+menu*2, item_menu[menu]);
+				centraliza(8+menu*2, itemMenu[menu]);
 				break;
 			case 80:
 				textcolor(WHITE);
-				centraliza(8+menu*2, item_menu[menu]);
-				if (menu == 5) {
+				centraliza(8+menu*2, itemMenu[menu]);
+				if (menu == 6) {
 					menu = 0;
 				} else {
 					menu++;
 				}
 				textcolor(LIGHT_RED);
-				centraliza(8+menu*2, item_menu[menu]);
+				centraliza(8+menu*2, itemMenu[menu]);
 				break;
 		}
 	} while ((int)cIn != 13);
@@ -589,32 +632,36 @@ void tela_menu(int menu) {
 	switch (menu) {
 		case 0:
 			telaCadastroClientes();
-			tela_menu(menu);
+			telaMenu(menu);
 			break;
 		case 1:
 			telaListaClientes();
-			tela_menu(menu);
+			telaMenu(menu);
 			break;
 		case 2:
 			telaCadastroVeiculos();
-			tela_menu(menu);
+			telaMenu(menu);
 			break;
 		case 3:
 			telaListaVeiculos();
-			tela_menu(menu);
+			telaMenu(menu);
 			break;
 		case 4:
-			//
-			tela_menu(menu);
+			telaLocacao();
+			telaMenu(menu);
 			break;
 		case 5:
+			telaDevolucao();
+			telaMenu(menu);
+			break;
+		case 6:
 			break;
 	}
 }
 
 int main() {
-	int menu = 5;
-    tela_menu(menu);
+	int menu = 6;
+    telaMenu(menu);
     
 	/*std::string nome;
     
