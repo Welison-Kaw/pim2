@@ -82,8 +82,8 @@ void borda (int xa, int ya, int xb, int yb, int tipo) {
 std::string validaEntrada(int tipo, int x, int y) {
 	/*	
 		TIPO
-		1 - APENAS NÚMEROS
-		2 - APENAS LETRAS, ESPAÇO E APÓSTROFO
+		1 - APENAS NÃšMEROS
+		2 - APENAS LETRAS, ESPAÃ‡O E APÃ“STROFO
 		OUTROS - 1 e 2
 	*/
 	
@@ -470,7 +470,7 @@ void telaCadastroVeiculos() {
 	veiculo.marca = 'C';
 	
 	if (salvar) {
-		// SALVAR ARQUIVO DO VEÍCULO
+		// SALVAR ARQUIVO DO VEÃCULO
 		ofstream arquivoVeiculo("veiculos.dat",ios::app);
 		if (arquivoVeiculo.is_open()) {
 			arquivoVeiculo << "0;";
@@ -545,6 +545,8 @@ void telaListaVeiculos() {
 void telaLocacao() {
 	system("cls");
 	int l = 7;
+	int aux = 0, qtde = 0;
+	string linha;
 	//bool salvar;
 
 	textcolor(WHITE);
@@ -555,9 +557,36 @@ void telaLocacao() {
     
 	centraliza(l-2,"Locacao de Veiculos");
 	
-	/* ESCOLHE VEÍCULO */
+	/* ESCOLHE VEÃCULO */
 	/* SELECIONA DATA DE ENTREGA */
 	
+	ifstream arquivoVeiculos("veiculos.dat");
+
+	if (arquivoVeiculos.is_open()) {
+		while (getline(arquivoVeiculos, linha)) {
+			if (linha[0] == '0')
+				qtde++;
+		}
+		arquivoVeiculos.close();
+	}
+
+	string placa[qtde][3];
+
+	if (arquivoVeiculos.is_open()) {
+		while (getline(arquivoVeiculos, linha)) {
+			if (linha[0] == '0') {
+				placa[aux][0] = linha[0];
+				aux++;
+			}
+		}
+		arquivoVeiculos.close();
+	}
+
+	gotoxy(5, l);
+	cout << placa[0][0];
+	gotoxy(5, l+1);
+	cout << placa[1][0];
+
 	getch();
 }
 
