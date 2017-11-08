@@ -82,8 +82,8 @@ void borda (int xa, int ya, int xb, int yb, int tipo) {
 std::string validaEntrada(int tipo, int x, int y) {
 	/*	
 		TIPO
-		1 - APENAS NÃšMEROS
-		2 - APENAS LETRAS, ESPAÃ‡O E APÃ“STROFO
+		1 - APENAS NUMEROS
+		2 - APENAS LETRAS, ESPACOS E APOSTROFE
 		OUTROS - 1 e 2
 	*/
 	
@@ -470,7 +470,7 @@ void telaCadastroVeiculos() {
 	veiculo.marca = 'C';
 	
 	if (salvar) {
-		// SALVAR ARQUIVO DO VEÃCULO
+		// SALVAR ARQUIVO DO VEÃƒÂCULO
 		ofstream arquivoVeiculo("veiculos.dat",ios::app);
 		if (arquivoVeiculo.is_open()) {
 			arquivoVeiculo << "0;";
@@ -545,7 +545,9 @@ void telaListaVeiculos() {
 void telaLocacao() {
 	system("cls");
 	int l = 7;
+	int v1, v2, v3;
 	int aux = 0, qtde = 0;
+	int i;
 	string linha;
 	//bool salvar;
 
@@ -557,11 +559,12 @@ void telaLocacao() {
     
 	centraliza(l-2,"Locacao de Veiculos");
 	
-	/* ESCOLHE VEÃCULO */
+	/* ESCOLHE VEICULO */
 	/* SELECIONA DATA DE ENTREGA */
 	
 	ifstream arquivoVeiculos("veiculos.dat");
 
+	gotoxy(0,l);
 	if (arquivoVeiculos.is_open()) {
 		while (getline(arquivoVeiculos, linha)) {
 			if (linha[0] == '0')
@@ -572,21 +575,96 @@ void telaLocacao() {
 
 	string placa[qtde][3];
 
+	arquivoVeiculos.clear();
+	arquivoVeiculos.open("veiculos.dat");
 	if (arquivoVeiculos.is_open()) {
 		while (getline(arquivoVeiculos, linha)) {
 			if (linha[0] == '0') {
-				placa[aux][0] = linha[0];
+				v1 = linha.find(';',2);
+				v2 = linha.find(';',v1+1);
+				v3 = linha.find(';',v2+1);
+				//cout << linha.substr(2,linha.find(';',2)-2) << '\n';
+				//cout << "1 - " << linha.substr(2, v1-2) << '\n';
+				//cout << "2 - " << linha.substr(v1+1, v2-v1-1) << '\n';
+				//cout << "3 - " << linha.substr(v2+1, v3-v2-1) << '\n';
+				//cout << aux << linha[0] << '\n';
+				placa[aux][0] = linha.substr(2, v1-2);
+				placa[aux][1] = linha.substr(v1+1, v2-v1-1);
+				placa[aux][2] = linha.substr(v2+1, v3-v2-1);
 				aux++;
 			}
 		}
 		arquivoVeiculos.close();
 	}
 
-	gotoxy(5, l);
-	cout << placa[0][0];
-	gotoxy(5, l+1);
-	cout << placa[1][0];
+	//cout << 'Carro:';
+	
+	//gotoxy(5, l+1);
+	//cout << placa[1][0];
+	
+	cout << qtde;
+	
+	aux = 0;
+		gotoxy(5, l+1);
+		cout << placa[aux][0] << '\n';
+		gotoxy(5, l+2);
+		cout << placa[aux][1] << '\n';
+		gotoxy(5, l+3);
+		cout << placa[aux][2] << '\n';
 
+		gotoxy(75,l);
+		cout << '-';
+
+		for(i=l+1;i<22;i++){
+			gotoxy(75,i);
+			cout << char(179);
+		}
+	
+		gotoxy(75,22);
+		cout << '-';
+			
+		gotoxy(75,((13*(aux*100)/(qtde-1))/100)+8);
+		cout << char(219);
+
+	unsigned char cIn;
+	do {
+		cIn = getch();
+		switch ((int)cIn) {
+			case 72:
+				if (aux > 0)
+					aux--;
+				break;
+			case 80:
+				if (aux < qtde-1)
+					aux++;
+				break;
+		}
+		gotoxy(5, l+1);
+		cout << placa[aux][0] << '\n';
+		gotoxy(5, l+2);
+		cout << placa[aux][1] << '\n';
+		gotoxy(5, l+3);
+		cout << placa[aux][2] << '\n';
+		
+		gotoxy(75,l);
+		cout << '-';
+
+		for(i=l+1;i<22;i++){
+			gotoxy(75,i);
+			cout << char(179);
+		}
+	
+		gotoxy(75,22);
+		cout << '-';
+			
+		gotoxy(75,((13*(aux*100)/(qtde-1))/100)+8);
+		cout << char(219);
+
+		gotoxy(5,l-1);
+		cout << (aux*100)/(qtde-1) << ' ' << aux << ' ' << qtde-1;
+
+	} while ((int)cIn != 13);
+	
 	getch();
 }
 
