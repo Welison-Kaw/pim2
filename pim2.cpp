@@ -208,11 +208,16 @@ void titulo() {
 	borda((80-tituloTexto.length())/2-2,tituloLinha-1,(80-tituloTexto.length())/2+tituloTexto.length()+1,tituloLinha+1,1);
 }
 
+/*	
+	FUNCAO QUE CRIA A TELA DE CADASTRO DE CLIENTES
+*/
+
 void telaCadastroClientes() {
-	system("cls");
+	system("cls"); // LIMPA A TELA
 	int l = 7;
 	bool salvar;
 	
+	/*STRUCT COM OS DADOS DO CLIENTE */
 	struct cadastroCliente {
 		std::string nome;
 		std::string rg;
@@ -221,17 +226,23 @@ void telaCadastroClientes() {
 		std::string nascimento;
 		std::string ong;
 	};
-	
 	struct cadastroCliente cliente;
-		
+	
+	/* 	MUDA A COR DAS LETRAS PARA BRANCO
+		POSICIONA O TITULO
+		CRIA BORDA DUPLA EM TODA A TELA */	
 	textcolor(WHITE);
 	titulo();
 	borda(0,0,79,24,2);
 	
+	/*	POSICIONA SUBTITULO
+		CRIA BORDA SIMPLES NA AREA DA TELA DESTINADA AO CONTEUDO */
 	centraliza(l-2, "Cadastro de Clientes");
-	
 	borda(2,l-1,77,23,1);
 
+	/*	CRIA ARRAY COM OS NOMES DOS CAMPOS
+		MUDA A COR DAS LETRAS PARA VERMELHO
+		POSICIONA OS CAMPOS NA TELA */
 	std::string item_cad[6] = {"Nome/Razao Social:", "RG:", "CPF/CNPJ:", "Habilitacao:", "Nascimento:", "ONG:"};
 	
 	textcolor(LIGHT_RED);
@@ -293,6 +304,7 @@ void telaCadastroClientes() {
 	
 	l += 5;
 
+	/*	PERGUNTA SE DESEJA SALVAR E MOSTRA OPCAO DE SIM/NAO */
 	centraliza(l++, "Deseja salvar o usuario?");
 	l++;
 
@@ -305,6 +317,9 @@ void telaCadastroClientes() {
 	borda(40,l-1,46,l+1,1);
 	salvar = false;
 
+	/*	CAPTURA TECLA DO USUARIO
+		ESQUERDA - SELECIONA "SIM"
+		DIREITA - SELECIONA "NAO" */
 	unsigned char cIn;
 	do {
 		cIn = getch();
@@ -344,8 +359,9 @@ void telaCadastroClientes() {
 		}
 	} while ((int)cIn != 13);
 	
+	/* CASO O USUARIO ESCOLHA SALVAR */
 	if (salvar) {
-		/* SALVAR ARQUIVO */
+		/* SALVAR ARQUIVO  */
 		ofstream arquivoCliente("clientes.dat",ios::app);
 		if (arquivoCliente.is_open()) {
 			arquivoCliente << "0;";
@@ -360,28 +376,37 @@ void telaCadastroClientes() {
 	}
 }
 
+/*	FUNCAO QUE CRIA A TELA QUE LISTA OS CLIENTES CADASTRADOS */
 void telaListaClientes() {
-	system("cls");
+	system("cls"); // LIMPA A TELA
 	
 	string linha;
-	ifstream arquivoCliente("clientes.dat");
+	ifstream arquivoCliente("clientes.dat"); // ARQUIVO QUE SERA LIDO
 	int posicao = 0;
 	int tamanhoColuna[] = {25,12,14,8,7};
 	int l, campo;
 	
+	/* 	MUDA A COR DAS LETRAS PARA BRANCO
+		POSICIONA O TITULO
+		CRIA BORDA DUPLA EM TODA A TELA */	
 	textcolor(WHITE);
 	titulo();
 	borda(0,0,79,24,2);
-	l = 7;
 	
-	if (arquivoCliente.is_open()) {
-		l = 7;
-		centraliza(l-2,"Lista de Clientes");
+	if (arquivoCliente.is_open()) { // ABRE ARQUIVO PARA INICIAR A LEITURA
+		l = 7; // LINHA INICIAL QUE COMECARA A SER ESCRITO
+		/*	ESCREVE O SUBTITULO CENTRALIZADO
+			CRIA UMA BORDA SIMPLES NA AREA A SER ESCRITA
+			POSICIONA PARA O INICIO DA ESCRITA */
+		centraliza(l-2,"Lista de Clientes"); 
 		borda(2,l-1,77,23,1);
 		gotoxy(5,l);
 		
 		while (getline(arquivoCliente, linha)) {
-			
+			/*	VERIFICA O PRIMEIRO CARACTER DA LINHA A COLORE A COR DE MODO ESPECIFICO
+				F - TITULO
+				0 - CLIENTE ATIVO 
+				1 - CLIENTE INATIVO */
 			switch (linha[0]) {
 				case '0':
 					textcolor(WHITE);
@@ -416,12 +441,12 @@ void telaListaClientes() {
 			
 			posicao = 0;
 		}
-		arquivoCliente.close();
+		arquivoCliente.close(); // FECHA O ARQUIVO
 	} else {
 		cout << "Nao foi possivel abrir o arquivo";
 	}
 	
-	getch();
+	getch(); // ESPERA O USUARIO APERTAR QUALQUER TECLA
 }
 
 void telaCadastroVeiculos() {
