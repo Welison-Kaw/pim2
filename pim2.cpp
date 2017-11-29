@@ -153,12 +153,13 @@ string formataData(string d, int tipo = 0, int hora = 0) {
 	return aux;
 }
 
-std::string validaEntrada(int tipo, int x, int y) {
+std::string validaEntrada(int tipo, int x, int y, int size = 0) {
 	/*	
 		TIPO
 		1 - APENAS NUMEROS
 		2 - APENAS LETRAS, ESPACOS E APOSTROFE
 		3 - NUMEROS E BARRAS (DATA)
+		4 - S/N
 		OUTROS - 1 e 2
 	*/
 	
@@ -173,15 +174,29 @@ std::string validaEntrada(int tipo, int x, int y) {
 		switch (tipo) {
 			case 1:
 				match = ("[0-9]");
+				size = (size == 0) ? 0: size;
+				//size = 0;
 				break;
 			case 2:
 				match = ("[a-zA-Z' ]");
+				size = (size == 0) ? 0: size;
+				//size = 0;
 				break;
 			case 3:
 				match = ("[0-9/]");
+				size = (size == 0) ? 10: size;
+				//size = 10;
+				break;
+			case 4:
+				match = ("[SN]");
+				size = (size == 0) ? 1: size;
+				//size = 1;
+				cIn = toupper(cIn);
 				break;
 			default:
 				match = ("[0-9a-zA-Z' ]");
+				size = (size == 0) ? 0: size;
+				//size = 0;
 				break;
 		}
 
@@ -193,8 +208,10 @@ std::string validaEntrada(int tipo, int x, int y) {
 					n.pop_back();
 				cout << n + ' ';
 			} else {
-				n += cIn;
-				cout << n;
+				if (size == 0 or n.length() < size) {
+					n += cIn;
+					cout << n;
+				}
 			}
 		}
 	} while ((n.length()) == 0 or ((int)cIn != 13));
@@ -208,10 +225,7 @@ void titulo() {
 	borda((80-tituloTexto.length())/2-2,tituloLinha-1,(80-tituloTexto.length())/2+tituloTexto.length()+1,tituloLinha+1,1);
 }
 
-/*	
-	FUNCAO QUE CRIA A TELA DE CADASTRO DE CLIENTES
-*/
-
+/*	FUNCAO QUE CRIA A TELA DE CADASTRO DE CLIENTES	*/
 void telaCadastroClientes() {
 	system("cls"); // LIMPA A TELA
 	int l = 7;
@@ -219,12 +233,11 @@ void telaCadastroClientes() {
 	
 	/*STRUCT COM OS DADOS DO CLIENTE */
 	struct cadastroCliente {
-		std::string nome;
-		std::string rg;
-		std::string cpf;
-		std::string habilitacao;
-		std::string nascimento;
-		std::string ong;
+		string nome;
+		string rg;
+		string cpf;
+		string idoso;
+		string ong;
 	};
 	struct cadastroCliente cliente;
 	
@@ -243,7 +256,7 @@ void telaCadastroClientes() {
 	/*	CRIA ARRAY COM OS NOMES DOS CAMPOS
 		MUDA A COR DAS LETRAS PARA VERMELHO
 		POSICIONA OS CAMPOS NA TELA */
-	std::string item_cad[6] = {"Nome/Razao Social:", "RG:", "CPF/CNPJ:", "Habilitacao:", "Nascimento:", "ONG:"};
+	std::string item_cad[5] = {"Nome:", "RG:", "CPF:", "Idoso(S/N):", "ONG(S/N):"};
 	
 	textcolor(LIGHT_RED);
 	
@@ -264,43 +277,27 @@ void telaCadastroClientes() {
 	gotoxy(40,l);
 	cout << item_cad[4];
 
-	++l;
-	gotoxy(5,++l);
-	cout << item_cad[5];
-	
 	l = 7;
 
 	textcolor(WHITE);
 	
-	char nn = '3';
-
 	gotoxy(item_cad[0].length()+6, ++l);
-	//nome = validaEntrada(2,item_cad[0].length()+6, l);
-	cliente.nome = "NOME";
+	cliente.nome = validaEntrada(2,item_cad[0].length()+6, l, 23);
 
 	l += 2;
 
 	gotoxy(item_cad[1].length()+6, l);
-	//rg = validaEntrada(1,item_cad[1].length()+6, l);
-	cliente.rg = "RG";
+	cliente.rg = validaEntrada(1,item_cad[1].length()+6, l, 9);
 	
 	gotoxy(item_cad[2].length()+41, l);
-	//cpf = validaEntrada(1,item_cad[2].length()+41, l);
-	cliente.cpf = "CPF";
+	cliente.cpf = validaEntrada(1,item_cad[2].length()+41, l, 11);
 	
 	l += 2;
 	gotoxy(item_cad[3].length()+6, l);
-	//habilitacao = validaEntrada(1,item_cad[3].length()+6, l);
-	cliente.habilitacao = "HABILITACAO";
+	cliente.idoso = (validaEntrada(4,item_cad[3].length()+6, l) == "S") ? "Sim" : "Nao";
 
 	gotoxy(item_cad[4].length()+41, l);
-	//nascimento = validaEntrada(1,item_cad[4].length()+41, l);
-	cliente.nascimento = "NASCIMENTO";
-	
-	l += 2;
-	gotoxy(item_cad[5].length()+6, l);
-	//ong = validaEntrada(3,item_cad[5].length()+6, l);
-	cliente.ong = "ONG";
+	cliente.ong = (validaEntrada(4,item_cad[4].length()+41, l) == "S") ? "Sim" : "Nao";
 	
 	l += 5;
 
@@ -365,12 +362,12 @@ void telaCadastroClientes() {
 		ofstream arquivoCliente("clientes.dat",ios::app);
 		if (arquivoCliente.is_open()) {
 			arquivoCliente << "0;";
-			arquivoCliente << cliente.nome << nn << ';';
-			arquivoCliente << cliente.rg << nn << ';';
-			arquivoCliente << cliente.cpf << nn << ';';
-			arquivoCliente << cliente.habilitacao << nn << ';';
-			arquivoCliente << cliente.nascimento << nn << ';';
-			arquivoCliente << cliente.ong << nn << ';' << '\n';
+			arquivoCliente << cliente.nome << ';';
+			arquivoCliente << cliente.rg << ';';
+			arquivoCliente << cliente.cpf << ';';
+			arquivoCliente << cliente.idoso << ';';
+			arquivoCliente << cliente.ong << ';';
+			arquivoCliente << '\n';
 			arquivoCliente.close();
 		}
 	}
@@ -382,7 +379,6 @@ void telaListaClientes() {
 	
 	string linha;
 	ifstream arquivoCliente("clientes.dat"); // ARQUIVO QUE SERA LIDO
-	int posicao = 0;
 	int tamanhoColuna[] = {25,12,14,8,7};
 	int l, campo;
 	
@@ -418,28 +414,15 @@ void telaListaClientes() {
 					textcolor(LIGHT_GREEN);
 					break;
 			}
-			
-			campo = 0;
-			for(std::string::size_type i = 0; i < linha.size(); ++i) {
-				if (posicao > 0 && linha[i] != ';') {
-					cout << linha[i];
-				} else {
-					if (linha[i] == ';')
-						campo++;
-				}
-				if (posicao > 1 && linha[i] == ';') {
-					for (int j=posicao;j<=tamanhoColuna[campo-2];j++) {
-						cout << ' ';
-					}
-					posicao = 1;
-				}
-				posicao++;
-			}
-			
+
+			cout << setw(tamanhoColuna[0]) << retornaLinhaPos(linha, 1); // NOME
+			cout << setw(tamanhoColuna[1]) << retornaLinhaPos(linha, 2); // RG
+			cout << setw(tamanhoColuna[2]) << retornaLinhaPos(linha, 3); // CPF
+			cout << setw(tamanhoColuna[3]) << retornaLinhaPos(linha, 4); // IDOSO
+			cout << setw(tamanhoColuna[4]) << retornaLinhaPos(linha, 5); // ONG			
+						
 			l++;
 			gotoxy(5,l);
-			
-			posicao = 0;
 		}
 		arquivoCliente.close(); // FECHA O ARQUIVO
 	} else {
@@ -449,6 +432,7 @@ void telaListaClientes() {
 	getch(); // ESPERA O USUARIO APERTAR QUALQUER TECLA
 }
 
+/*	FUNCAO QUE CRIA A TELA DE CADASTRO DE VEICULOS	*/
 void telaCadastroVeiculos() {
 	system("cls");
 	int l = 7;
@@ -468,8 +452,7 @@ void telaCadastroVeiculos() {
 		string placa;
 		string modelo;
 		string marca;
-		int diaria;
-		//int km;
+		double diaria;
 	};
 	
 	struct clienteVeiculo veiculo;
@@ -487,37 +470,25 @@ void telaCadastroVeiculos() {
 	gotoxy(5,++l);
 	cout << item_cad[3];
 	
-	/*++l;
-	gotoxy(5,++l);
-	cout << item_cad[4];*/
-	
 	textcolor(WHITE);
 	
 	l = 7;
 	gotoxy(item_cad[0].length()+6, ++l);
-	veiculo.placa = "";
-	getch();
+	veiculo.placa = validaEntrada(5,item_cad[0].length()+6, l, 7);
 	++l;
 
 	gotoxy(item_cad[1].length()+6, ++l);
-	veiculo.modelo = "";
-	getch();
+	veiculo.modelo = validaEntrada(5,item_cad[1].length()+6, l, 9);
 	++l;
 	
 	gotoxy(item_cad[2].length()+6, ++l);
-	veiculo.marca = "";
-	getch();
+	veiculo.marca = validaEntrada(5,item_cad[2].length()+6, l, 13);
 	++l;
 
 	gotoxy(item_cad[3].length()+6, ++l);
-	veiculo.diaria = 0;
-	getch();
+	veiculo.diaria = stod(validaEntrada(1,item_cad[3].length()+6, l));
 	++l;
 
-	/*gotoxy(item_cad[4].length()+6, ++l);
-	veiculo.km = 0;
-	getch();*/
-	
 	l += 2;
 	
 	centraliza(l++, "Deseja salvar o veiculo?");
@@ -580,14 +551,13 @@ void telaCadastroVeiculos() {
 			arquivoVeiculo << veiculo.modelo << ';';
 			arquivoVeiculo << veiculo.marca << ';';
 			arquivoVeiculo << veiculo.diaria << ';';
-			//arquivoVeiculo << veiculo.km << ';' << '\n';
 			arquivoVeiculo.close();
 		}
 	}
-	
-	//getch();
 }
 
+/*	FUNCAO QUE CRIA A TELA DE LISTAGEM DE VEICULOS
+	EM VERMELHO SAO MOSTRADOS OS VEICULOS JA ALUGADOS	*/
 void telaListaVeiculos() {
 	system("cls");
 	string linha;
@@ -628,24 +598,6 @@ void telaListaVeiculos() {
 				cout << setw(tamanhoColuna[3]) << stod(retornaLinhaPos(linha, 4)); // DIARIA
 			}
 		
-			/*for(std::string::size_type i = 0; i < linha.size(); ++i) {
-				if (campo <= 4) {
-					if (posicao > 0 && linha[i] != ';') {
-						cout << linha[i];
-					} else {
-						if (linha[i] == ';')
-							campo++;
-					}
-					if (posicao > 1 && linha[i] == ';') {
-						for (int j=posicao;j<=tamanhoColuna[campo-2];j++) {
-							cout << ' ';
-						}
-						posicao = 1;
-					}
-					posicao++;
-				}
-			}*/
-			
 			if (linha[0] == 'F') {
 				//cout << "  Cliente (CPF)";
 				cout << "  Dt Devolucao";
@@ -667,6 +619,7 @@ void telaListaVeiculos() {
 	getch();
 }
 
+/*	SIMULA UMA BARRA DE ROLAGEM LATERAL */
 void barraRolagem(int posicao) {
 	int linha = 7;
 	gotoxy(75,linha);
@@ -684,12 +637,18 @@ void barraRolagem(int posicao) {
 	cout << char(219);
 }
 
+/*
+	ALTERA ARQUIVO DE VEICULOS
+	A ALTERACAO OCORRE NO PARAMETRO DE STATUS DO CARRO (PRIMEIRO CARACTER)
+	O ULTIMOS TRES PARAMETROS (CPF DO CLIENTE, DATA DE RETORNO E DATA DE LOCACAO) SAO
+	INCLUIDOS (EM CASO DE LOCACAO) OU EXCLUIDOS (EM CASO DE DEVOLUCAO)
+*/
 void alteraArquivoVeiculo(string placa, string cliente = "", string retorno = "", string dtLocacao = "") {
 	ifstream filein("veiculos.dat");
 	ofstream fileout("temp.dat");
 	string linha;
 	
-	while (filein >> linha) {
+	while(getline(filein, linha)) {
 		if (linha.substr(2,linha.find(';',2)-2) == placa) {
 			if (cliente == "") {
 				linha[0] = '0';
@@ -711,9 +670,13 @@ void alteraArquivoVeiculo(string placa, string cliente = "", string retorno = ""
 	rename("temp.dat", "veiculos.dat");
 }
 
+/*
+	LISTA OS CLIENTES E OS CARROS DISPONIVEIS PARA LOCACAO
+	AO ALUGAR UM VEICULO, O MESMO FICA INDISPONIVEL PARA LOCACAO
+*/
 void telaLocacao() {
 	system("cls");
-	int l = 7, i, aux, qtde;
+	int l = 7, i, aux, qtdeClientes, qtdeVeiculos;
 	string linha, dtLocacao, hrLocacao, dthrSistema;
 	bool salvar;
 	int veiculoEscolhido, clienteEscolhido;
@@ -745,7 +708,7 @@ void telaLocacao() {
 	
 	ifstream arquivoClientes("clientes.dat");
 	
-	qtde = 0;
+	qtdeClientes = 0;
 	gotoxy(0,1);
 	if (arquivoClientes.is_open()) {
 		while (getline(arquivoClientes, linha)) {
@@ -753,16 +716,44 @@ void telaLocacao() {
 				cliente.push_back(sCliente());
 				cliente[cliente.size()-1].nome = retornaLinhaPos(linha, 1);
 				cliente[cliente.size()-1].cpf = retornaLinhaPos(linha, 3);
-				qtde++;
+				qtdeClientes++;
 			}
 		}
 		arquivoClientes.close();
 	}
 	
+	ifstream arquivoVeiculos("veiculos.dat");
+	
+	qtdeVeiculos = 0;
+	gotoxy(0,l);
+	if (arquivoVeiculos.is_open()) {
+		while (getline(arquivoVeiculos, linha)) {
+			if (linha[0] == '0'){
+				veiculo.push_back(sVeiculo());
+				
+				veiculo[veiculo.size()-1].placa = retornaLinhaPos(linha, 1);
+				veiculo[veiculo.size()-1].marca = retornaLinhaPos(linha, 2);
+				veiculo[veiculo.size()-1].modelo = retornaLinhaPos(linha, 3);
+				
+				qtdeVeiculos++;
+			}
+		}
+		arquivoVeiculos.close();
+	}
+	
+	if (qtdeClientes == 0) {
+		centraliza(13, "Sem Clientes cadastrados!");
+		if (qtdeVeiculos == 0) {
+			centraliza(15, "Sem Veiculos cadastrados!");
+		}
+		getch();
+		return;
+	}
+	
 	aux = 0;
 	
-	if (qtde != 1)
-		barraRolagem(((13*(aux*100)/(qtde-1))/100)+8);
+	if (qtdeClientes != 1)
+		barraRolagem(((13*(aux*100)/(qtdeClientes-1))/100)+8);
 
 	gotoxy(5, l+1);
 	textcolor(LIGHT_RED);
@@ -783,7 +774,7 @@ void telaLocacao() {
 					aux--;
 				break;
 			case 80:
-				if (aux < qtde-1)
+				if (aux < qtdeClientes-1)
 					aux++;
 				break;
 		}
@@ -801,8 +792,8 @@ void telaLocacao() {
 		textcolor(WHITE);	
 		cout << cliente[aux].cpf << '\n';
 		
-		if (qtde != 1)
-			barraRolagem(((13*(aux*100)/(qtde-1))/100)+8);
+		if (qtdeClientes != 1)
+			barraRolagem(((13*(aux*100)/(qtdeClientes-1))/100)+8);
 
 	} while ((int)cIn != 13);
 	
@@ -811,9 +802,9 @@ void telaLocacao() {
 	/* ESCOLHE VEICULO */
 	/* SELECIONA DATA DE ENTREGA */
 	
-	ifstream arquivoVeiculos("veiculos.dat");
+	/*ifstream arquivoVeiculos("veiculos.dat");
 
-	qtde = 0;
+	qtdeVeiculos = 0;
 	gotoxy(0,l);
 	if (arquivoVeiculos.is_open()) {
 		while (getline(arquivoVeiculos, linha)) {
@@ -824,18 +815,18 @@ void telaLocacao() {
 				veiculo[veiculo.size()-1].marca = retornaLinhaPos(linha, 2);
 				veiculo[veiculo.size()-1].modelo = retornaLinhaPos(linha, 3);
 				
-				qtde++;
+				qtdeVeiculos++;
 			}
 		}
 		arquivoVeiculos.close();
-	}
+	}*/
 
 	l+=3;
 	
 	aux = 0;
 
-	if (qtde != 1)
-		barraRolagem(((13*(aux*100)/(qtde-1))/100)+8);
+	if (qtdeVeiculos != 1)
+		barraRolagem(((13*(aux*100)/(qtdeVeiculos-1))/100)+8);
 
 	gotoxy(5, l+1);
 	textcolor(LIGHT_RED);
@@ -861,7 +852,7 @@ void telaLocacao() {
 					aux--;
 				break;
 			case 80:
-				if (aux < qtde-1)
+				if (aux < qtdeVeiculos-1)
 					aux++;
 				break;
 		}
@@ -884,8 +875,8 @@ void telaLocacao() {
 		textcolor(WHITE);
 		cout << veiculo[aux].marca << '\n';
 		
-		if (qtde != 1)
-			barraRolagem(((13*(aux*100)/(qtde-1))/100)+8);
+		if (qtdeVeiculos != 1)
+			barraRolagem(((13*(aux*100)/(qtdeVeiculos-1))/100)+8);
 		
 	} while ((int)cIn != 13);
 	
@@ -1015,6 +1006,11 @@ void telaLocacao() {
 	}
 }
 
+/*
+	MOSTRA AO USUARIO O PRECO QUE ELE DEVERA PAGAR
+	(CONTABILIZANDO-SE AS MULTAS E DECONTOS)
+	AO FINALIZAR, O STATUS DO CARRO RETORNA AO NORMAL, PODENDO ALUGA-LO NOVAMENTE
+*/
 void telaDevolucao() {
 	system("cls");
 	int l = 7;
@@ -1104,7 +1100,7 @@ void telaDevolucao() {
 	textcolor(LIGHT_RED);
 	cout << "Diaria: ";
 	textcolor(WHITE);
-	cout << veiculo[aux].diaria << '\n';
+	cout << stod(veiculo[aux].diaria) << '\n';
 	
 	gotoxy(5, l+5);
 	textcolor(LIGHT_RED);
@@ -1161,7 +1157,7 @@ void telaDevolucao() {
 		textcolor(LIGHT_RED);
 		cout << "Diaria: ";
 		textcolor(WHITE);
-		cout << veiculo[aux].diaria << '\n';
+		cout << stod(veiculo[aux].diaria) << '\n';
 
 		gotoxy(5, l+5);
 		textcolor(LIGHT_RED);
@@ -1188,7 +1184,7 @@ void telaDevolucao() {
 	
 	veiculoEscolhido = aux;
 	
-	l+=8;
+	l+=9;
 	gotoxy(5,l++);
 	textcolor(LIGHT_RED);
 	cout << "Devolvido em (DD/MM/YYYY): ";
@@ -1221,7 +1217,6 @@ void telaDevolucao() {
 	
 	textcolor(LIGHT_GREEN);
 	centraliza(l, "Total a Pagar");
-	//borda(31,l-1,47,l+1,1);
 	
 	l+=2;
 	
@@ -1250,9 +1245,6 @@ void telaDevolucao() {
 	
 	atraso = diferencaHoras(veiculo[veiculoEscolhido].devolucao, dtDevolucao);
 	
-	gotoxy(0,0);
-	cout << veiculo[veiculoEscolhido].dtLocacao << endl << dtDevolucao << endl;
-	
 	if (atraso > 0) {
 		l++;
 		gotoxy(5,l++);
@@ -1261,7 +1253,7 @@ void telaDevolucao() {
 		gotoxy(5,l++);
 		textcolor(WHITE);
 		totalFinal += (stoi(veiculo[veiculoEscolhido].diaria)/24*atraso);
-		cout << (stod(veiculo[veiculoEscolhido].diaria)/24*atraso) << " (" << atraso << " horas de traso na devolucao)";
+		cout << (stod(veiculo[veiculoEscolhido].diaria)/24*atraso) << " - " << atraso << " hora(s) de traso na devolucao";
 	}
 	
 	l++;
@@ -1301,14 +1293,14 @@ void telaMenu(int menu) {
 	int linha;
 	string itemMenu[7] = {"Cadastrar Novo Cliente", "Visualizar Lista de Clientes", "Cadastrar Novo Veiculo", "Verificar Lista de Veiculos", "Locacao", "Devolucao", "Sair"};
 	
-	// BRANCO
 	textcolor(WHITE);
     borda(0,0,79,24,2);
 	
 	titulo();
 	
-	linha = 6;
+	linha = 6; // LINHA INICIAL DO MENU
 	
+	/*	POSICIONA O MENU NA TELA */
 	for (int i=0; i<7; i++) {
 		if (menu == i) {
 			textcolor(LIGHT_RED);
@@ -1319,11 +1311,13 @@ void telaMenu(int menu) {
 		centraliza(linha, itemMenu[i]);
 	}
 	
+	/*	AS SETAS NAVEGAM PELO MENOS
+		APERTAR ENTER DEFINE A ESCOLHA DO USUARIO */
 	unsigned char cIn;
 	do {
 		cIn = getch();
 		switch ((int)cIn) {
-			case 72:
+			case 72: // TECLA DA SETA SUPERIOR
 				textcolor(WHITE);
 				centraliza(8+menu*2, itemMenu[menu]);
 				if (menu == 0) {
@@ -1334,7 +1328,7 @@ void telaMenu(int menu) {
 				textcolor(LIGHT_RED);
 				centraliza(8+menu*2, itemMenu[menu]);
 				break;
-			case 80:
+			case 80: // TECLA DA SETA INFERIOR
 				textcolor(WHITE);
 				centraliza(8+menu*2, itemMenu[menu]);
 				if (menu == 6) {
@@ -1374,24 +1368,43 @@ void telaMenu(int menu) {
 			telaMenu(menu);
 			break;
 		case 6:
-			break;
+			break; // FECHA O PROGRAMA
 	}
+}
+
+/*	CERTIFICA-SE QUE OS ARQUIVOS EXISTEM
+	EM CASO DE NAO EXISTIREM SAO CRIADOS DOIS ARQUIVOS VAZIOS */
+void verificaArquivos() {
+	ifstream arqVeiculos("veiculos.dat");
+	ifstream arqClientes("clientes.dat");
+	
+	if (arqClientes.good() != 1) {
+		ofstream CriaArqClientes("clientes.dat");
+		if (CriaArqClientes.is_open()) {
+			CriaArqClientes	<< "F;Nome;RG;CPF/CNPJ;Idoso;ONG;" << '\n';
+			CriaArqClientes.close();
+		}
+	}
+
+	if (arqVeiculos.good() != 1) {
+		ofstream CriaArqVeiculos("veiculos.dat");
+		if (CriaArqVeiculos.is_open()) {
+			CriaArqVeiculos	<< "F;Placa;Modelo;Marca;Diaria;" << '\n';
+			CriaArqVeiculos.close();
+		}
+	}
+
 }
 
 int main() {
 	int menu = 6;
 	
-	/* DEFINE A PRECISAO FIXA DE 2 CASAS DECIMAIS PARA VARIAVEIS DO TIPO */
-	cout << fixed << setprecision(2);
+	/*	DEFINE A PRECISAO FIXA DE 2 CASAS DECIMAIS PARA VARIAVEIS DO TIPO DECIMAL
+		DEFINE O ALINHAMENTO PARA A ESQUERDA */
+	cout << fixed << setprecision(2) << left;
 
+	verificaArquivos();
 	telaMenu(menu);
     
-	/*std::string nome;
-    
-    nome = validaEntrada(3,0,10);
-    
-    gotoxy(1,1);
-    cout << nome;*/
-
 	return 0;
 }
