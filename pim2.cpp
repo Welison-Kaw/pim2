@@ -7,11 +7,119 @@
 #include<vector>
 #include<time.h>
 #include<iomanip>
+#include<direct.h>
 
 using namespace std;
 
 const string tituloTexto = "LEGAL RENT A CARS"; // TITULO USADO PARA TODAS AS TELAS
 const int tituloLinha = 2; // POSICAO ONDE SERA MOSTRADO O TITULO
+
+void criaReadMe() {
+	remove("readme/menu.txt");
+	remove("readme/cadcliente.txt");
+	remove("readme/listaclientes.txt");
+	remove("readme/cadveiculo.txt");
+	remove("readme/listaveiculos.txt");
+	remove("readme/locacao.txt");
+	remove("readme/devolucao.txt");
+	mkdir("readme");
+	ofstream arqMenu("menu.txt");
+	ofstream arqCadCliente("cadcliente.txt");
+	ofstream arqListaCliente("listaclientes.txt");
+	ofstream arqCadVeiculo("cadveiculo.txt");
+	ofstream arqListaVeiculo("listaveiculos.txt");
+	ofstream arqLocacao("locacao.txt");
+	ofstream arqDevolucao("devolucao.txt");
+	string linha;
+	
+	arqMenu << "LEGAL RENT A CARS" << endl << endl
+<< "DOCUMENTO DE AJUDA" << endl << endl
+<< "*********          MENU          *********" << endl << endl
+<< "\tNo menu principal o usuário poderá escolher entre várias opções disponíveis no sistema." << endl
+<< "\tA selação dos menus é feita usando-se as setas \"PARA CIMA\" e \"PARA BAIXO\". Após selecionar o menu desejado o usuário deverá apertar ENTER para que a janela com a opção desejada seja apresentada." << endl
+<< "\tAo finalizar a utilização do sistema o usuário poderá escolher a opção \"Sair\" no menu principal."; 
+	arqMenu.close();
+	
+	arqCadCliente << "LEGAL RENT A CARS" << endl << endl
+<< "DOCUMENTO DE AJUDA" << endl << endl
+<< "*********          CADASTRO DE CLIENTES          *********" << endl << endl
+<< "No \"CADASTRO DE CLIENTES\" o usuário poderá adicionar novos clientes ao sistema. É necessários o preenchimento dos seguintes campos:" << endl << endl
+<< "NOME: O nome do cliente a ser adicionado;" << endl
+<< "RG: O número do RG (sem pontos);" << endl
+<< "CPF: O número do CPF (sem pontos);" << endl
+<< "Idoso(S/N): Informar se o cliente é ou não idoso. Essa informação deverá ser cadastrada na forma das letras \"S\" (para \"Sim\") ou \"N\" (para \"Não\");" << endl
+<< "ONG(S/N): Informar se o cilente é ou não parceiro da ONG. Essa informação deverá ser cadastrada na forma das letras \"S\" (para \"Sim\") ou \"N\" (para \"Não\");" << endl << endl
+<< "Após o preenchimento de cada campo, a tecla \"Enter\" deverá ser apertada." << endl << endl
+<< "Ao inserir todos os dados será perguntado ao usuário se ele deseja salvar os dados no sistema ou não. Qualquer opção escolhida fecherá a tela e redirecionará o usuário para o menu principal, mas escolhendo \"Sim\" os dados serão salvos e poderão ser usados no futuro.";
+	arqCadCliente.close();
+
+	arqListaCliente << "LEGAL RENT A CARS" << endl << endl
+<< "DOCUMENTO DE AJUDA" << endl << endl
+<< "*********          LISTAGEM DE CLIENTES*********" << endl << endl
+<< "Na \"LISTAGEM DE CLIENTES\" serão apresentados os clientes já cadastrados no sistema em formato de planilha. Após terminar de visualizar os dados o usuário poderá apertar qualquer tecla para voltar ao menu principal.";
+	arqListaCliente.close();
+
+	arqCadVeiculo << "LEGAL RENT A CARS" << endl << endl
+<< "DOCUMENTO DE AJUDA" << endl << endl
+<< "*********          CADASTRO DE VEÍCULOS          *********" << endl << endl
+<< "No \"CADASTRO DE VEICULOS\" o usuário poderá adicionar novos veículos ao sistema. É necessário o preenchimento dos seguintes campos:" << endl << endl
+<< "Placa: A placa do veículo;" << endl
+<< "Modelo: O modelo do veículo;" << endl
+<< "Marca: A marca do veículo;" << endl
+<< "Diária: O valor diário para a locação do veículo;" << endl << endl
+<< "Após o preenchimento de cada campo, a tecla \"Enter\" deverá ser apertada." << endl << endl
+<< "Ao inserir todos os dados será perguntado ao usuário se ele deseja salvar os dados no sistema ou não. Qualquer opção escolhida fecherá a tela e redirecionará o usuário para o menu principal, mas escolhendo \"Sim\" os dados serão salvos e poderão ser usados no futuro.";
+	arqCadVeiculo.close();
+
+	arqListaVeiculo << "LEGAL RENT A CARS" << endl << endl
+<< "DOCUMENTO DE AJUDA" << endl << endl
+<< "*********          LISTAGEM DE VEÍCULOS          *********" << endl << endl
+<< "Na \"LISTAGEM DE VEÍCULOS\" serão apresentados os veículos já cadastrados no sistema em formato de planilha." << endl << endl 
+<< "Em vermelho estão os veículos que já foram alugados. Nesses casos também é apresentada a data que o cliente deseja permanecer com o carro em \"Data de Devolução\"" << endl << endl
+<< "Após terminar de visualizar os dados o usuário poderá apertar qualquer tecla para voltar ao menu principal.";
+	arqListaVeiculo.close();
+	
+	arqLocacao << "LEGAL RENT A CARS" << endl << endl
+<< "DOCUMENTO DE AJUDA" << endl << endl
+<< "*********          LOCAÇÃO          *********" << endl << endl
+<< "Inicialmente serão apresentados os clientes cadastrados. O usuário deverá usar as setas \"PARA CIMA\" e \"PARA BAIXO\" para navegar entre os usuários. Na lateral é mostrada uma barra de rolagem que informa o quanto já foi percorrida da lista total." << endl << endl
+<< "Após selecionar o cliente (escolhendo um item listado e apertando \"ENTER\") o usuário fará o mesmo processo com os veículos cadastrados. Nessa lista são apresentados apenas os veículos disponíveis, ou seja, que não foram alugados." << endl << endl
+<< "Na próxima etapa o usuário deverá informar a data de devolução pretendida pelo cliente. O formato da data é:" << endl
+<< "Dia - Dois dígitos;" << endl
+<< "Mês - Dois dígitos;" << endl
+<< "Ano - Quatro dígitos;" << endl << endl
+<< "Finalmente o usuário deverá informar a hora que o cliente pretende devolver o veículo. A hora deverá ser informada com dois dígitos." << endl << endl
+<< "Após o preenchimento dos dados será mostrada uma opção para que o usuário confirme a locação do veículo para o cliente escolhido. Selecionando \"Não\" ele retornará para o menu principal sem alterar nenhum dado. Caso escolha \"Sim\" o veículo terá seu status alterado não sendo mais possível alugá-lo para outro cliente." << endl << endl
+<< "Ao finalizar a locação, um recibo é apresentado com as seguintes informações:" << endl << endl
+<< "- Hora da Locação;" << endl
+<< "- Placa;" << endl
+<< "- Cliente;" << endl
+<< "- CPF;" << endl
+<< "- Data de Devolução;" << endl << endl
+<< "Apertando qualquer tecla o usuário retornará para o menu principal.";
+	arqLocacao.close();
+	
+	arqDevolucao << "LEGAL RENT A CARS" << endl << endl
+<< "DOCUMENTO DE AJUDA" << endl << endl
+<< "*********          DEVOLUÇÃO          *********" << endl << endl
+<< "Na \"DEVOLUÇÃO DE VEÍCULOS\" o usuário inicialmente deverá selecionar o veículo que está sendo devolvido. Alguns dados referentes ao veículo, cliente e da locação são apresentados na tela, para auxiliar o usuário. Usando as teclas \"PARA CIMA\" e \"PARA BAIXO\" ele deverá navegar entre todos os veículos alugados." << endl << endl
+<< "Após encontrar o item desejado, deverá ser apertada a tecla \"ENTER\" para selecionar o veículo. O sistema então irá esperar para que o usuário entre com a data em que o veículo foi realmente devolvido. O formato da data é:" << endl
+<< "Dia - Dois dígitos;" << endl
+<< "Mês - Dois dígitos;" << endl
+<< "Ano - Quatro dígitos;" << endl << endl
+<< "Após entrar com a data, será necessário entrar com a hora que o cliente devolveu o veículo. A hora deverá ser informada com dois dígitos." << endl << endl
+<< "Ao finalizar esses passos serão mostrados o total parcial, assim como  os descontos (caso existam) e as multas (caso existam). O carro é então liberado para ser alugado por outro cliente." << endl << endl
+<< "O \"Total Final\" é o total calculado (com multas e descontos) que o cliente deverá pagar. Ao finalizar o usuário poderá apertar qualquer tecla, o que fará com que seja mostrado o menu principal.";
+	arqDevolucao.close();
+	
+	rename("menu.txt","readme/menu.txt");
+	rename("cadcliente.txt","readme/cadcliente.txt");
+	rename("listaclientes.txt","readme/listaclientes.txt");
+	rename("cadveiculo.txt","readme/cadveiculo.txt");
+	rename("listaveiculos.txt","readme/listaveiculos.txt");
+	rename("locacao.txt", "readme/locacao.txt");
+	rename("devolucao.txt", "readme/devolucao.txt");
+}
 
 enum DOS_COLORS {
         BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN,
@@ -153,7 +261,7 @@ string formataData(string d, int tipo = 0, int hora = 0) {
 	return aux;
 }
 
-std::string validaEntrada(int tipo, int x, int y, int size = 0) {
+std::string validaEntrada(int tipo, int x, int y, int size = 0, int tela = 0) {
 	/*	
 		TIPO
 		1 - APENAS NUMEROS
@@ -170,49 +278,70 @@ std::string validaEntrada(int tipo, int x, int y, int size = 0) {
 	do {
 		cIn = getch();
 		
-		std::regex match;
-		switch (tipo) {
-			case 1:
-				match = ("[0-9]");
-				size = (size == 0) ? 0: size;
-				//size = 0;
-				break;
-			case 2:
-				match = ("[a-zA-Z' ]");
-				size = (size == 0) ? 0: size;
-				//size = 0;
-				break;
-			case 3:
-				match = ("[0-9/]");
-				size = (size == 0) ? 10: size;
-				//size = 10;
-				break;
-			case 4:
-				match = ("[SN]");
-				size = (size == 0) ? 1: size;
-				//size = 1;
-				cIn = toupper(cIn);
+		switch ((int)cIn) {
+			case 0: 
+				cIn = getch();
+				if ((int)cIn == 59)
+					switch (tela) {
+						case 1:
+							system("notepad.exe readme/cadcliente.txt");
+							break;
+						case 3:
+							system("notepad.exe readme/cadcliente.txt");
+							break;
+						case 5:
+							system("notepad.exe readme/locacao.txt");
+							break;
+						case 6:
+							system("notepad.exe readme/devolucao.txt");
+							break;
+					}
 				break;
 			default:
-				match = ("[0-9a-zA-Z' ]");
-				size = (size == 0) ? 0: size;
-				//size = 0;
-				break;
-		}
-
-		if (std::regex_match(string(1,cIn), match) or (int)cIn == 8) {
-			gotoxy(x,y);
-	
-			if ((int)cIn == 8) {
-				if (n.length() > 0)
-					n.pop_back();
-				cout << n + ' ';
-			} else {
-				if (size == 0 or n.length() < size) {
-					n += cIn;
-					cout << n;
+				std::regex match;
+				switch (tipo) {
+					case 1:
+						match = ("[0-9]");
+						size = (size == 0) ? 0: size;
+						//size = 0;
+						break;
+					case 2:
+						match = ("[a-zA-Z' ]");
+						size = (size == 0) ? 0: size;
+						//size = 0;
+						break;
+					case 3:
+						match = ("[0-9/]");
+						size = (size == 0) ? 10: size;
+						//size = 10;
+						break;
+					case 4:
+						match = ("[SN]");
+						size = (size == 0) ? 1: size;
+						//size = 1;
+						cIn = toupper(cIn);
+						break;
+					default:
+						match = ("[0-9a-zA-Z' ]");
+						size = (size == 0) ? 0: size;
+						//size = 0;
+						break;
 				}
-			}
+		
+				if (std::regex_match(string(1,cIn), match) or (int)cIn == 8) {
+					gotoxy(x,y);
+			
+					if ((int)cIn == 8) {
+						if (n.length() > 0)
+							n.pop_back();
+						cout << n + ' ';
+					} else {
+						if (size == 0 or n.length() < size) {
+							n += cIn;
+							cout << n;
+						}
+					}
+				}
 		}
 	} while ((n.length()) == 0 or ((int)cIn != 13));
 	
@@ -223,6 +352,8 @@ std::string validaEntrada(int tipo, int x, int y, int size = 0) {
 void titulo() {
 	centraliza(tituloLinha, tituloTexto);
 	borda((80-tituloTexto.length())/2-2,tituloLinha-1,(80-tituloTexto.length())/2+tituloTexto.length()+1,tituloLinha+1,1);
+	gotoxy(70,2);
+	cout << "F1-Ajuda";
 }
 
 /*	FUNCAO QUE CRIA A TELA DE CADASTRO DE CLIENTES	*/
@@ -282,22 +413,22 @@ void telaCadastroClientes() {
 	textcolor(WHITE);
 	
 	gotoxy(item_cad[0].length()+6, ++l);
-	cliente.nome = validaEntrada(2,item_cad[0].length()+6, l, 23);
+	cliente.nome = validaEntrada(2,item_cad[0].length()+6, l, 23, 1);
 
 	l += 2;
 
 	gotoxy(item_cad[1].length()+6, l);
-	cliente.rg = validaEntrada(1,item_cad[1].length()+6, l, 9);
+	cliente.rg = validaEntrada(1,item_cad[1].length()+6, l, 9, 1);
 	
 	gotoxy(item_cad[2].length()+41, l);
-	cliente.cpf = validaEntrada(1,item_cad[2].length()+41, l, 11);
+	cliente.cpf = validaEntrada(1,item_cad[2].length()+41, l, 11, 1);
 	
 	l += 2;
 	gotoxy(item_cad[3].length()+6, l);
-	cliente.idoso = (validaEntrada(4,item_cad[3].length()+6, l) == "S") ? "Sim" : "Nao";
+	cliente.idoso = (validaEntrada(4,item_cad[3].length()+6, l, 1, 1) == "S") ? "Sim" : "Nao";
 
 	gotoxy(item_cad[4].length()+41, l);
-	cliente.ong = (validaEntrada(4,item_cad[4].length()+41, l) == "S") ? "Sim" : "Nao";
+	cliente.ong = (validaEntrada(4,item_cad[4].length()+41, l, 1, 1) == "S") ? "Sim" : "Nao";
 	
 	l += 5;
 
@@ -381,6 +512,7 @@ void telaListaClientes() {
 	ifstream arquivoCliente("clientes.dat"); // ARQUIVO QUE SERA LIDO
 	int tamanhoColuna[] = {25,12,14,8,7};
 	int l, campo;
+	bool sair;
 	
 	/* 	MUDA A COR DAS LETRAS PARA BRANCO
 		POSICIONA O TITULO
@@ -429,7 +561,20 @@ void telaListaClientes() {
 		cout << "Nao foi possivel abrir o arquivo";
 	}
 	
-	getch(); // ESPERA O USUARIO APERTAR QUALQUER TECLA
+	/* ABRE O ARQUIVO DE AJUDA */
+	unsigned char cIn;
+	sair = false;
+	do {
+		cIn = getch();
+		if ((int)cIn == 0) {
+			cIn = getch();
+			if((int)cIn == 59) {
+				system("notepad.exe readme/listaclientes.txt");
+			}
+		} else {
+			sair = true;
+		}
+	} while(!sair);
 }
 
 /*	FUNCAO QUE CRIA A TELA DE CADASTRO DE VEICULOS	*/
@@ -474,19 +619,19 @@ void telaCadastroVeiculos() {
 	
 	l = 7;
 	gotoxy(item_cad[0].length()+6, ++l);
-	veiculo.placa = validaEntrada(5,item_cad[0].length()+6, l, 7);
+	veiculo.placa = validaEntrada(5,item_cad[0].length()+6, l, 7, 3);
 	++l;
 
 	gotoxy(item_cad[1].length()+6, ++l);
-	veiculo.modelo = validaEntrada(5,item_cad[1].length()+6, l, 9);
+	veiculo.modelo = validaEntrada(5,item_cad[1].length()+6, l, 9, 3);
 	++l;
 	
 	gotoxy(item_cad[2].length()+6, ++l);
-	veiculo.marca = validaEntrada(5,item_cad[2].length()+6, l, 13);
+	veiculo.marca = validaEntrada(5,item_cad[2].length()+6, l, 13, 3);
 	++l;
 
 	gotoxy(item_cad[3].length()+6, ++l);
-	veiculo.diaria = stod(validaEntrada(1,item_cad[3].length()+6, l));
+	veiculo.diaria = stod(validaEntrada(1,item_cad[3].length()+6, l, 0, 3));
 	++l;
 
 	l += 2;
@@ -564,6 +709,7 @@ void telaListaVeiculos() {
 	ifstream arquivoVeiculos("veiculos.dat");
 	int tamanhoColuna[] = {9,10,14,10};
 	int l;
+	bool sair;
 	
 	textcolor(WHITE);
 	titulo();
@@ -600,7 +746,7 @@ void telaListaVeiculos() {
 		
 			if (linha[0] == 'F') {
 				//cout << "  Cliente (CPF)";
-				cout << "  Dt Devolucao";
+				cout << "  Data de Devolucao";
 			} else {
 				if (linha[0] == '1') {
 					//cout << retornaLinhaPos(linha, 5);
@@ -616,7 +762,20 @@ void telaListaVeiculos() {
 		cout << "Nao foi possivel abrir o arquivo";
 	}
 	
-	getch();
+	/* ABRE O ARQUIVO DE AJUDA */
+	unsigned char cIn;
+	sair = false;
+	do {
+		cIn = getch();
+		if ((int)cIn == 0) {
+			cIn = getch();
+			if((int)cIn == 59) {
+				system("notepad.exe readme/listaveiculos.txt");
+			}
+		} else {
+			sair = true;
+		}
+	} while(!sair);
 }
 
 /*	SIMULA UMA BARRA DE ROLAGEM LATERAL */
@@ -678,7 +837,7 @@ void telaLocacao() {
 	system("cls");
 	int l = 7, i, aux, qtdeClientes, qtdeVeiculos;
 	string linha, dtLocacao, hrLocacao, dthrSistema;
-	bool salvar;
+	bool salvar, sair;
 	int veiculoEscolhido, clienteEscolhido;
 	unsigned char cIn;
 	
@@ -777,6 +936,12 @@ void telaLocacao() {
 				if (aux < qtdeClientes-1)
 					aux++;
 				break;
+			case 0:
+				cIn = getch();
+				if ((int)cIn == 59) {
+					system("notepad.exe readme/locacao.txt");
+				}
+				break;
 		}
 		
 		repeteChar(5,l+1,74,l+2,' ');
@@ -802,25 +967,6 @@ void telaLocacao() {
 	/* ESCOLHE VEICULO */
 	/* SELECIONA DATA DE ENTREGA */
 	
-	/*ifstream arquivoVeiculos("veiculos.dat");
-
-	qtdeVeiculos = 0;
-	gotoxy(0,l);
-	if (arquivoVeiculos.is_open()) {
-		while (getline(arquivoVeiculos, linha)) {
-			if (linha[0] == '0'){
-				veiculo.push_back(sVeiculo());
-				
-				veiculo[veiculo.size()-1].placa = retornaLinhaPos(linha, 1);
-				veiculo[veiculo.size()-1].marca = retornaLinhaPos(linha, 2);
-				veiculo[veiculo.size()-1].modelo = retornaLinhaPos(linha, 3);
-				
-				qtdeVeiculos++;
-			}
-		}
-		arquivoVeiculos.close();
-	}*/
-
 	l+=3;
 	
 	aux = 0;
@@ -855,6 +1001,12 @@ void telaLocacao() {
 				if (aux < qtdeVeiculos-1)
 					aux++;
 				break;
+			case 0:
+				cIn = getch();
+				if ((int)cIn == 59) {
+					system("notepad.exe readme/locacao.txt");
+				}
+				break;
 		}
 		
 		repeteChar(5,l+1,74,l+3,' ');
@@ -887,13 +1039,13 @@ void telaLocacao() {
 	textcolor(LIGHT_RED);
 	cout << "Data de Devolucao (DD/MM/YYYY): ";
 	textcolor(WHITE);
-	cin >> dtLocacao;
+	dtLocacao = validaEntrada(3, 37, l+2, 10, 5);
 	
 	gotoxy(5,l+3);
 	textcolor(LIGHT_RED);
 	cout << "Hora de Devolucao (HH): ";
 	textcolor(WHITE);
-	cin >> hrLocacao;
+	hrLocacao = validaEntrada(1, 29, l+3, 2, 5);
 
 	dtLocacao = formataData(dtLocacao,1) + hrLocacao;
 
@@ -1002,7 +1154,19 @@ void telaLocacao() {
 		
 		alteraArquivoVeiculo(veiculo[veiculoEscolhido].placa, cliente[clienteEscolhido].cpf, dtLocacao, dthrSistema);
 
-		getch();
+		/* ABRE O ARQUIVO DE AJUDA */
+		sair = false;
+		do {
+			cIn = getch();
+			if ((int)cIn == 0) {
+				cIn = getch();
+				if((int)cIn == 59) {
+					system("notepad.exe readme/locacao.txt");
+				}
+			} else {
+				sair = true;
+			}
+		} while(!sair);
 	}
 }
 
@@ -1021,7 +1185,7 @@ void telaDevolucao() {
 	int horaDevolucao;
 	double totalFinal = 0;
 	
-	bool idoso, ong;
+	bool idoso, ong, sair;
 	
 	struct sVeiculo {
 		string placa;
@@ -1131,6 +1295,12 @@ void telaDevolucao() {
 				if (aux < qtde-1)
 					aux++;
 				break;
+			case 0:
+				cIn = getch();
+				if ((int)cIn == 59) {
+					system("notepad.exe readme/devolucao.txt");
+				}
+				break;
 		}
 		
 		repeteChar(5,l+1,74,l+3,' ');
@@ -1185,17 +1355,17 @@ void telaDevolucao() {
 	veiculoEscolhido = aux;
 	
 	l+=9;
-	gotoxy(5,l++);
+	gotoxy(5,l);
 	textcolor(LIGHT_RED);
 	cout << "Devolvido em (DD/MM/YYYY): ";
 	textcolor(WHITE);
-	cin >> dtDevolucao;
+	dtDevolucao = validaEntrada(3, 32, l++, 10, 6);
 
-	gotoxy(5,l++);
+	gotoxy(5,l);
 	textcolor(LIGHT_RED);
 	cout << "Hora da Devolucacao(HH): ";
 	textcolor(WHITE);
-	cin >> horaDevolucao;
+	horaDevolucao = stoi(validaEntrada(1, 30, l++, 2, 6));
 	
 	dtDevolucao = formataData(dtDevolucao,1) + to_string(horaDevolucao);
 	
@@ -1253,7 +1423,7 @@ void telaDevolucao() {
 		gotoxy(5,l++);
 		textcolor(WHITE);
 		totalFinal += (stoi(veiculo[veiculoEscolhido].diaria)/24*atraso);
-		cout << (stod(veiculo[veiculoEscolhido].diaria)/24*atraso) << " - " << atraso << " hora(s) de traso na devolucao";
+		cout << (stod(veiculo[veiculoEscolhido].diaria)/24*atraso) << " - " << atraso << " hora(s) de atraso na devolucao";
 	}
 	
 	l++;
@@ -1285,7 +1455,19 @@ void telaDevolucao() {
 	
 	alteraArquivoVeiculo(veiculo[veiculoEscolhido].placa);
 	
-	getch();
+	/* ABRE O ARQUIVO DE AJUDA */
+	sair = false;
+	do {
+		cIn = getch();
+		if ((int)cIn == 0) {
+			cIn = getch();
+			if((int)cIn == 59) {
+				system("notepad.exe readme/devolucao.txt");
+			}
+		} else {
+			sair = true;
+		}
+	} while(!sair);
 }
 
 void telaMenu(int menu) {
@@ -1304,6 +1486,7 @@ void telaMenu(int menu) {
 	for (int i=0; i<7; i++) {
 		if (menu == i) {
 			textcolor(LIGHT_RED);
+			borda(18,7+menu*2,60,9+menu*2,1);
 		} else {
 			textcolor(WHITE);
 		}
@@ -1320,6 +1503,8 @@ void telaMenu(int menu) {
 			case 72: // TECLA DA SETA SUPERIOR
 				textcolor(WHITE);
 				centraliza(8+menu*2, itemMenu[menu]);
+				textcolor(BLACK);
+				borda(18,7+menu*2,60,9+menu*2,1);
 				if (menu == 0) {
 					menu = 6;
 				} else {
@@ -1327,10 +1512,13 @@ void telaMenu(int menu) {
 				}
 				textcolor(LIGHT_RED);
 				centraliza(8+menu*2, itemMenu[menu]);
+				borda(18,7+menu*2,60,9+menu*2,1);
 				break;
 			case 80: // TECLA DA SETA INFERIOR
 				textcolor(WHITE);
 				centraliza(8+menu*2, itemMenu[menu]);
+				textcolor(BLACK);
+				borda(18,7+menu*2,60,9+menu*2,1);
 				if (menu == 6) {
 					menu = 0;
 				} else {
@@ -1338,6 +1526,13 @@ void telaMenu(int menu) {
 				}
 				textcolor(LIGHT_RED);
 				centraliza(8+menu*2, itemMenu[menu]);
+				borda(18,7+menu*2,60,9+menu*2,1);
+				break;
+			case 0:
+				cIn = getch();
+				if ((int)cIn == 59) {
+					system("notepad.exe readme/menu.txt");
+				}
 				break;
 		}
 	} while ((int)cIn != 13);
@@ -1404,7 +1599,8 @@ int main() {
 	cout << fixed << setprecision(2) << left;
 
 	verificaArquivos();
+	criaReadMe();
 	telaMenu(menu);
-    
+	
 	return 0;
 }
