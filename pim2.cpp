@@ -162,6 +162,13 @@ void repeteChar(int x1, int y1, int x2, int y2, char c) {
 	}
 }
 
+string lpad(const int value, const unsigned precision)
+{
+     ostringstream oss;
+     oss << setw(precision) << setfill('0') << value;
+     return oss.str();
+}
+
 /*
 	FUNCAO USADA PARA RETONAR UMA POSICAO ESPECIFICA
 	DA LINHA OBTIDA NOS ARQUIVOS DE TEXTO
@@ -1115,15 +1122,15 @@ void telaLocacao() {
 
     	time_t t = time(0);
     	struct tm * now = localtime( & t );
-    	cout	<< (now->tm_mday) << '/'
-				<< (now->tm_mon + 1) << '/'
+    	cout	<< lpad(now->tm_mday,2) << '/'
+				<< lpad(now->tm_mon + 1,2) << '/'
 				<< (now->tm_year + 1900) << ' '
-				<< (now->tm_hour) << ':'
-				<< (now->tm_min) << ':'
-				<< (now->tm_sec)
+				<< lpad(now->tm_hour,2) << ':'
+				<< lpad(now->tm_min,2) << ':'
+				<< lpad(now->tm_sec,2)
 				<< endl;
 				
-		dthrSistema = to_string(now->tm_year + 1900) + to_string(now->tm_mon + 1) + to_string(now->tm_mday) + to_string(now->tm_hour);
+		dthrSistema = lpad(now->tm_year + 1900,4) + lpad(now->tm_mon + 1,2) + lpad(now->tm_mday,2) + lpad(now->tm_hour,2);
 
 		textcolor(LIGHT_RED);
 		gotoxy(5,l++);
@@ -1422,7 +1429,7 @@ void telaDevolucao() {
 		cout << "Multas";
 		gotoxy(5,l++);
 		textcolor(WHITE);
-		totalFinal += (stoi(veiculo[veiculoEscolhido].diaria)/24*atraso);
+		totalFinal += (stod(veiculo[veiculoEscolhido].diaria)/24*atraso);
 		cout << (stod(veiculo[veiculoEscolhido].diaria)/24*atraso) << " - " << atraso << " hora(s) de atraso na devolucao";
 	}
 	
@@ -1471,6 +1478,10 @@ void telaDevolucao() {
 }
 
 void telaMenu(int menu) {
+	/*	DEFINE A PRECISAO FIXA DE 2 CASAS DECIMAIS PARA VARIAVEIS DO TIPO DECIMAL
+		DEFINE O ALINHAMENTO PARA A ESQUERDA */
+	cout << fixed << setprecision(2) << left;
+
 	system("cls");
 	int linha;
 	string itemMenu[7] = {"Cadastrar Novo Cliente", "Visualizar Lista de Clientes", "Cadastrar Novo Veiculo", "Verificar Lista de Veiculos", "Locacao", "Devolucao", "Sair"};
@@ -1594,10 +1605,6 @@ void verificaArquivos() {
 int main() {
 	int menu = 6;
 	
-	/*	DEFINE A PRECISAO FIXA DE 2 CASAS DECIMAIS PARA VARIAVEIS DO TIPO DECIMAL
-		DEFINE O ALINHAMENTO PARA A ESQUERDA */
-	cout << fixed << setprecision(2) << left;
-
 	verificaArquivos();
 	criaReadMe();
 	telaMenu(menu);
